@@ -28,4 +28,4 @@ npm link
 [![asciicast](https://asciinema.org/a/7gcu3l3YWKQnoEfpbpbnLBa91.svg)](https://asciinema.org/a/7gcu3l3YWKQnoEfpbpbnLBa91)
 
 ### Difference between 2 flat JSON or YAML files
-[![asciicast](https://asciinema.org/a/fm1AUWy9fDHrGD24zI0dvwJtJ.svg)](https://asciinema.org/a/fm1AUWy9fDHrGD24zI0dvwJtJ)
+[![asciicast](https://asciinema.org/a/imGS4WAmwQRUgyCUfL6zcDlNt.svg)](https://asciinema.org/a/imGS4WAmwQRUgyCUfL6zcDlNt)
