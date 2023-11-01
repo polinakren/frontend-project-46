@@ -20,9 +20,9 @@ const getDifferences = (data1, data2) => {
       return ` - ${key}: ${data1[key]}`;
     }
     if (data1[key] === data2[key]) {
-      return ` ${key}: ${data1[key]}`;
+      return `   ${key}: ${data1[key]}`;
     }
-    return ` - ${key}: ${data1[key]}\n + {key}: ${data2[key]}`;
+    return ` - ${key}: ${data1[key]}\n + ${key}: ${data2[key]}`;
   });
 
   return `{\n${diff.join('\n')}\n}`;
