@@ -1,7 +1,7 @@
 import path from 'path';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
-import { test, expect, describe } from '@jest/globals';
+import { test, expect } from '@jest/globals';
 import genDiff from '../src/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -22,18 +22,33 @@ const file2Json = getFixturePath('file2.json');
 const file1Yaml = getFixturePath('file1.yaml');
 const file2Yaml = getFixturePath('file2.yaml');
 
-describe('genDiff test', () => {
-  test('yaml format', () => {
-    expect(genDiff(file1Yaml, file2Yaml)).toEqual(expectedStylish);
-    expect(genDiff(file1Yaml, file2Yaml, 'stylish')).toEqual(expectedStylish);
-    expect(genDiff(file1Yaml, file2Yaml, 'plain')).toEqual(expectedPlain);
-    expect(genDiff(file1Yaml, file2Yaml, 'json')).toEqual(expectedJson);
-  });
-
-  test('json format', () => {
-    expect(genDiff(file1Json, file2Json)).toEqual(expectedStylish);
-    expect(genDiff(file1Json, file2Json, 'stylish')).toEqual(expectedStylish);
-    expect(genDiff(file1Json, file2Json, 'plain')).toEqual(expectedPlain);
-    expect(genDiff(file1Json, file2Json, 'json')).toEqual(expectedJson);
-  });
+test.each([
+  {
+    file1: file1Json, file2: file2Json, expected: expectedStylish,
+  },
+  {
+    file1: file1Json, file2: file2Json, formatName: 'stylish', expected: expectedStylish,
+  },
+  {
+    file1: file1Json, file2: file2Json, formatName: 'plain', expected: expectedPlain,
+  },
+  {
+    file1: file1Json, file2: file2Json, formatName: 'json', expected: expectedJson,
+  },
+  {
+    file1: file1Yaml, file2: file2Yaml, expected: expectedStylish,
+  },
+  {
+    file1: file1Yaml, file2: file2Yaml, formatName: 'stylish', expected: expectedStylish,
+  },
+  {
+    file1: file1Yaml, file2: file2Yaml, formatName: 'plain', expected: expectedPlain,
+  },
+  {
+    file1: file1Yaml, file2: file2Yaml, formatName: 'json', expected: expectedJson,
+  },
+])('genDiff: json, stylish, plain', ({
+  file1, file2, formatName, expected,
+}) => {
+  expect(genDiff(file1, file2, formatName)).toEqual(expected);
 });
