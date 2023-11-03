@@ -11,30 +11,32 @@ const stringify = (data, depth) => {
   }
   const entries = Object.entries(data);
   const result = entries.map(([key, value]) => `${getIndent(depth + 1)}  ${key}: ${stringify(value, depth + 1)}`);
-  return `{\n${result.join('\n')}\n  ${getIndent(depth)}}`;
+  return `{\n${result.join('\n')}\n ${getIndent(depth)} }`;
 };
 
 const stylish = (data) => {
   const iter = (node, depth = 1) => {
-    switch (node.type) {
-      case 'nested': {
-        const arr = node.children.flatMap((child) => iter(child, depth + 1));
-        return `${getIndent(depth)}  ${node.key}: {\n${arr.join('\n')}\n${getIndent(depth)}  }`;
+    const result = node.map((item) => {
+      switch (item.type) {
+        case 'nested': {
+          return `${getIndent(depth)}  ${item.key}: {\n${iter(item.children, depth + 1)}\n${getIndent(depth)}  }`;
+        }
+        case 'deleted':
+          return `${getIndent(depth)}- ${item.key}: ${stringify(item.value, depth)}`;
+        case 'added':
+          return `${getIndent(depth)}+ ${item.key}: ${stringify(item.value, depth)}`;
+        case 'changed':
+          const before = `${getIndent(depth)}- ${item.key}: ${stringify(item.value1, depth)}`.trimEnd();
+          return (`${before}\n${getIndent(depth)}+ ${item.key}: ${stringify(item.value2, depth)}`);
+        case 'unchanged':
+          return `${getIndent(depth)}  ${item.key}: ${stringify(item.value, depth)}`;
+        default:
+          throw new Error(`Unknown type ${item.type}`);
       }
-      case 'added':
-        return `${getIndent(depth)}+ ${node.key}: ${stringify(node.value, depth)}`;
-
-      case 'deleted':
-        return `${getIndent(depth)}- ${node.key}: ${stringify(node.value, depth)}`;
-
-      case 'changed':
-        return (`${getIndent(depth)}- ${node.key}: ${stringify(node.value1, depth)}\n${getIndent(depth)}+ ${node.key}: ${stringify(node.value2, depth)}`);
-      default:
-        throw new Error(`Unknown type: ${node.type}`);
-    }
+    });
+    return result.join('\n');
   };
-  const resultArray = data.flatMap((node) => iter(node, 1));
-  return `{\n${resultArray.join('\n')}\n}`;
+  return `{\n${iter(data)}\n}`;
 };
 
 export default stylish;
