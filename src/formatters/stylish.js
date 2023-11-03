@@ -26,7 +26,7 @@ const stylish = (data) => {
         case 'added':
           return `${getIndent(depth)}+ ${item.key}: ${stringify(item.value, depth)}`;
         case 'changed':
-          return (`${`${getIndent(depth)}- ${item.key}: ${stringify(item.value1, depth)}`.trimEnd()}\n${getIndent(depth)}+ ${item.key}: ${stringify(item.value2, depth)}`);
+          return (`${getIndent(depth)}- ${item.key}: ${stringify(item.value1, depth)}\n${getIndent(depth)}+ ${item.key}: ${stringify(item.value2, depth)}`);
         case 'unchanged':
           return `${getIndent(depth)}  ${item.key}: ${stringify(item.value, depth)}`;
         default:
